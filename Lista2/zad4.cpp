@@ -9,13 +9,17 @@ int gcd(int a, int b)
 
 void shift2(int A[], int n, int k)
 {
-    for (int i = 1; i < n; i++)
-    {
-        int temp = A[i];
-        int next = (i + k) % n;
-        A[i] = A[next];
-        A[next] = temp;
-    }
+        int temp;
+        int current = A[0];
+        int next = k % n;
+
+        for (int j = 1; j < n + 1; j++)
+        {
+            temp = A[next];
+            A[next] = current;
+            current = temp;
+            next = (next + k) % n; 
+        }
 }
 
 void shift(int A[], int n, int k)
@@ -37,20 +41,23 @@ void shift(int A[], int n, int k)
             A[next] = current;
             current = temp;
             next = (next + k) % n;
+            
         }
     }
 }
 
+
+
 int main()
 {
-    int A[] = {1,2,3,4,5,6,7,8,9,10};
-    shift(A, 10, 6);
-    for (int i = 0; i < 10; i++)
+    int A[] = {1,2,3,4,5,6,7,8,9};
+    shift(A, 9, 3);
+    for (int i = 0; i < 9; i++)
         std::cout << A[i] << " ";
     std::cout << std::endl;
 
     int B[] = {1,2,3,4,5,6};
-    shift2(B, 6, 5);
+    shift2(B, 6, 1);
     for (int i = 0; i < 6; i++)
         std::cout << B[i] << " ";
     std::cout << std::endl;
