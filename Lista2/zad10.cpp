@@ -12,155 +12,93 @@ class Node
 	{}
 };
 
-
-void insert(Node *& root, int x)
+void insert(Node *& t, int x)
 {
-    Node* current = root;
-    Node* parent = nullptr;
-
-    if (root == nullptr)
-    {
-        root = new Node(x);
-    }
-
-    while (current != nullptr)
-    {
-        parent = current;
-
-        if (x < current->x)
-        {
-            current = current->left;
-        }
-
-        else
-        {
-            current = current->right;
-        }
-    }
-
-    if (x < parent->x)
-    {
-        parent->left = new Node(x);
-    }
-
-    else
-    {
-        parent->right = new Node(x);
-    }
-    
+    Node **t1=&t;
+	while(*t1)
+		if(x<(*t1)->x)
+			t1=&((*t1)->left);
+		else
+			t1=&((*t1)->right);
+	*t1=new Node(x);
 }
 
-void insert_r(Node *& root, int x)
+void in_order(Node *& t)
 {
-    if (root == nullptr)
+    if (t != nullptr)
     {
-        root = new Node(x);
-        return;
-    }
-
-    if (root->x > x)
-        insert_r(root->left, x);
-
-    else
-        insert_r(root->right, x);
-}
-
-void in_order(Node *& root)
-{
-    if (root != nullptr)
-    {
-        in_order(root->left);
-        std::cout << root->x << " ";
-        in_order(root->right);
-    }
-    
-}
-
-Node* find_r(Node *& root, int x)
-{
-    if (root == nullptr)
-        return nullptr;
-
-    else
-    {
-        if (x == root->x)
-            return root;
-        
-        else if (x < root->x)
-            find_r(root->left, x);
-        
-        else
-            find_r(root->right, x);
+        in_order(t->left);
+        std::cout << t->x << " ";
+        in_order(t->right);
     }
 }
 
-Node* find(Node *& root, int x)
+Node* find(Node *t, int x)
 {
-    if (root == nullptr)
-        return nullptr;
-
-    Node* current = root;
-
-    while (current != nullptr)
-    {
-        if (x == current->x)
-            return current;
-
-        else if (x < current->x)
-            current = current->left;
-        
-        else
-            current = current->right;
-    }
+    while(t && t->x != x)
+	{
+		if(x < t->x) 
+			t = t->left; 
+		else
+			t = t->right; 
+	}
+	return t;
 }
 
-//zad13
-void inorder_do(Node* root, void f(Node*))
+void remove(Node *&t, int x)
 {
-    if (root == nullptr)
-        return;
-
-    inorder_do(root->left, f);
-    f(root);
-    inorder_do(root->right, f);
-}
-
-void func(Node* node)
-{
-    node->x = node->x + 1;
-}
-
-int height(Node* root)
-{
-    if (root == nullptr)
-        return 0;
-
-    int left = height(root->left);
-    int right = height(root->right);
-
-    if (left > right)
-        return 1 + left;
-    else
-        return 1 + right;
+	Node **t1=&t;
+	while (*t1 && (*t1)->x!=x)
+	{
+		if(x<(*t1)->x) 
+			t1=&((*t1)->left); 
+		else
+			t1=&((*t1)->right); 
+	}
+	if(*t1)
+	{
+		if((*t1)->right && (*t1)->left)
+		{
+			Node **t2=&((*t1)->right);
+			while ((*t2)->left)
+				t2=&((*t2)->left);
+			(*t1)->x=(*t2)->x;
+			t1=t2;
+		}	
+		if((*t1)->left==nullptr)
+		{
+			Node *d=(*t1)->right;
+			delete *t1;
+			(*t1)=d;
+		}
+		else
+		{
+		    Node *d=(*t1)->left;	
+			delete *t1;
+			(*t1)=d;
+		}
+	}
 }
 
 int main()
 {
-    Node *rightChild = new Node(8);
-    Node *leftChild = new Node(2);
-    Node *root = new Node(5, leftChild, rightChild);
-
-    in_order(root);
+    Node *t = new Node(10);
+    insert(t, 15);
+    insert(t, 5);
+    insert(t, 20);
+    insert(t, 8);
+    insert(t, 7);
+    in_order(t);
 
     std::cout << std::endl;
-    /*
-    std::cout << find(root, 8) << ", " << find(root, 5) << ", "
-              << find(root, -1) << std::endl;
-    */
+    std::cout << "Node \'7\' adress:" << find(t, 7) << std::endl;
+    std::cout << "Node \'10\' adress:" << find(t, 10) << std::endl;
 
-    //removes2(root, 5);
-    inorder_do(root, func);
-    in_order(root);
-    std::cout << height(root);
-    //Complexity for find, insert, remove -> O(h)
+    std::cout << "Remove node \'10\'" << std::endl;
+    remove(t, 10);
+    in_order(t);
+
+    std::cout << "Remove node \'5\'" << std::endl;
+    remove(t, 5);
+    in_order(t);
 }
