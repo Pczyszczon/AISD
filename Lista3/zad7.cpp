@@ -1,7 +1,7 @@
 #include <iostream>
 #include <queue>
 
-class Node // drzewo bez wskaźnika na rodzica
+class Node
 {
     public:
     int x;
