@@ -53,11 +53,6 @@ class heap
     {
         przesiej_w_gore(t,n++,x);
     }
-    
-    void print()
-    {
-
-    }
 
     double max()
     {
@@ -79,7 +74,6 @@ class priorityQueue
     private:
     double *t;
     int n;
-    double previousMax;
     int capacity;
 
     public:
@@ -87,7 +81,6 @@ class priorityQueue
     priorityQueue(double *t0, int capacity, int n0=0):t(t0),n(n0)
     {
         build_heap();
-        previousMax = 0;
         this->capacity = capacity;
     }
 
@@ -109,7 +102,6 @@ class priorityQueue
         double res=t[0];
         t[0]=t[--n];
         przesiej(t,0,n);
-        previousMax = res;
         return res;
     }
 
@@ -119,7 +111,6 @@ class priorityQueue
     }
     bool is_empty()
     {
-        //return previousMax == max();
         return n <= 0;
     }
     bool is_full()
